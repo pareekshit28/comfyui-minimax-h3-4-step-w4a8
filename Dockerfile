@@ -1,6 +1,9 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.10.0-base
 
+# Enable model offloading in both ComfyUI startup modes.
+RUN sed -i 's|/comfyui/main.py |/comfyui/main.py --lowvram --disable-smart-memory |g' /start.sh
+
 # build-time tokens for gated downloads are read from BuildKit secret
 # mounts — they are never written to a layer or to image history.
 # pass via: docker buildx build --secret id=hf_token,env=HF_TOKEN .
